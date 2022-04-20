@@ -61,7 +61,7 @@ namespace CountryhouseService.API.Controllers
                 // Return result
                 ImageDto imageDto = new(imageId, imageToAdd.Source);
                 _logger.LogControllerAction(LogLevel.Information, $"Created {nameof(T)} {imageDto}");
-                return Created(imageToAdd.Source, createImageDto);
+                return Created(imageToAdd.Source, null);
             }
             catch (HttpRequestException e)
             {
