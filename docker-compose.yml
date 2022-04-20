@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+    db:
+        image: "mcr.microsoft.com/mssql/server"
+        environment:
+            SA_PASSWORD: "${SA_PASSWORD}"
+            ACCEPT_EULA: "Y"
+        user: root
+        volumes:
+            - servicedata:/var/opt/mssql/data
+    countryhouseservice.api:
+        image: ${DOCKER_REGISTRY-}countryhouseserviceapi
+        build:
+            context: .
+            dockerfile: src/CountryhouseService.API/Dockerfile
+        depends_on: 
+            - db
+        environment:
+            - SA_PASSWORD=${SA_PASSWORD}
+            - ASPNETCORE_URLS=http://+:80
+            - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+            - CloudinarySettings__Name=djemweekg
+            - CloudinarySettings__ApiSecret=${CLOUDINARY_SECRET}
+            - CloudinarySettings__ApiKey=${CLOUDINARY_KEY}
+        ports:
+            - 80:80
+
+volumes:
+    servicedata:
